@@ -9,11 +9,13 @@ pydantic = "*"
 pydantic-settings = "*"
 fastapi = "*"
 python-dotenv = "*"
-psycopg2-binary = "*"
 alembic = "*"
+boto3 = "*"
+aioboto3 = "==12.1.0"
+python-multipart = "*"
 
 [dev-packages]
 uvicorn = "*"
 
 [requires]
-python_version = "3.12"
+python_version = "3.9"

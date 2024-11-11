@@ -31,6 +31,12 @@ class BaseConfig(BaseSettings):
   env: str = os.getenv("APP_ENV", "local")
   db_app: ClassVar[DBConfig] = AppDBConfig
   
+  # AWS S3
+  aws_region_name: str = os.getenv("AWS_S3_REGION", "")
+  aws_access_key_id: str = os.getenv("AWS_S3_KEY_ID", "")
+  aws_secret_access_key: str = os.getenv("AWS_S3_SECRET_ACCESS_KEY", "")
+  aws_bucket_name: str = os.getenv("AWS_S3_BUCKET_NAME", "")
+  
 
 """
 lru_cache: caches the output of a function for a given input,

@@ -1,11 +1,14 @@
-from fastapi import Request
+from fastapi import Request, UploadFile
+from src.lib.s3 import AWS_S3
+from src.exceptions.generic import FileUploadException
 
 class UploadController:
   """Upload Controller"""
   
   @classmethod
-  async def upload(self, request: Request, payload: str):
-    try:
-      return {"message": "Logged in"}
-    except Exception as e:
+  async def upload(self, request: Request, payload: UploadFile):
+    try:      
+      s3 = AWS_S3()
+      return await s3.upload_to_s3(payload.file, 'videos/sample')
+    except FileUploadException as e:
       return {"error": str(e)}
