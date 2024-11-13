@@ -2,7 +2,7 @@ import aioboto3
 from src.configs.env import get_settings
 import logging
 from src.configs.error_constants import ErrorMessages
-from src.exceptions.generic import FileUploadException
+from src.exceptions.errors.generic import FileUploadException
 
 config = get_settings()
 logger = logging.getLogger()

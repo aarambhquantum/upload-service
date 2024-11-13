@@ -4,6 +4,7 @@ import uvicorn
 from configs.env import get_settings
 from fastapi.middleware.gzip import GZipMiddleware
 from routes.v1 import main as v1_routes
+from src.exceptions.handlers.generic import register_handlers
 
 config = get_settings()
 
@@ -14,6 +15,8 @@ app = FastAPI(
   title="Upload service",
   description=""
 )
+
+register_handlers(app)
 
 @app.on_event("startup")
 async def startup_event():
