@@ -4,6 +4,7 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.dialects.postgresql import (
   BIGINT
 )
+from sqlalchemy.orm import relationship
 
 class SectionVideoAssociation(Base):
   __tablename__ = DBTables.SECTION_VIDEO_ASSOCIATION
@@ -14,3 +15,7 @@ class SectionVideoAssociation(Base):
   # Foreign keys
   section_id = Column(BIGINT, ForeignKey(f"{DBTables.SECTION}.id"), nullable=False)
   video_id = Column(BIGINT, ForeignKey(f"{DBTables.VIDEO}.id"), nullable=False)
+  
+  # Relationship
+  sections = relationship("Section", back_populates="video_associations")
+  videos = relationship("Video", back_populates="section_associations")

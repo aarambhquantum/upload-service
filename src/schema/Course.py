@@ -20,5 +20,6 @@ class Course(Base):
   
   # Relationship
   owner = relationship("User", back_populates="courses")
-  topics = relationship("Topic", secondary="CourseTopicAssociation", back_populates="courses")
-  sections = relationship("Section", back_populates="courses")
+  sections = relationship("Section", back_populates="course")
+  topics = relationship("Topic", secondary=DBTables.COURSE_TOPIC_ASSOCIATION, back_populates="courses")
+  topic_associations = relationship("CourseTopicAssociation", back_populates="courses")

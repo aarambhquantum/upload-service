@@ -84,6 +84,7 @@ def save_new_row(new_row):
         db.add(new_row)
         db.commit()
         db.refresh(new_row)
+        return new_row
     except Exception as e:
         db.rollback()
         db.close()
@@ -96,6 +97,7 @@ def update_old_row(old_row):
     try:
         db.commit()
         db.refresh(old_row)
+        return old_row
     except Exception as e:
         db.rollback()
         db.close()

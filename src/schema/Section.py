@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import (
 )
 from datetime import datetime
 from src.schema.main import Base
+from src.schema import SectionVideoAssociation
 
 class Section(Base):
   __tablename__ = DBTables.SECTION
@@ -22,4 +23,5 @@ class Section(Base):
   
   # Relationships
   course = relationship("Course", back_populates="sections")
-  videos = relationship("Video", secondary="SectionVideoAssociation", back_populates="sections")
+  videos = relationship("Video", secondary=DBTables.SECTION_VIDEO_ASSOCIATION, back_populates="sections")
+  video_associations = relationship("SectionVideoAssociation", back_populates="sections")

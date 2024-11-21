@@ -15,3 +15,7 @@ class CourseTopicAssociation(Base):
   course_id = Column(BIGINT, ForeignKey(f'{DBTables.COURSE}.id'), nullable=False)
   topic_id = Column(BIGINT, ForeignKey(f'{DBTables.TOPIC}.id'), nullable=False)
   
+  # Relationship
+  courses = relationship("Course", back_populates="topic_associations")
+  topics = relationship("Topic", back_populates="course_associations")
+  

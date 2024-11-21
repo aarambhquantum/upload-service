@@ -16,11 +16,11 @@ class Video(Base):
   title = Column(String(255), nullable=False, index=True)
   
   description = Column(String(5000), nullable=True)
-  video_url = Column(String(255), nullable=False)
+  video_url = Column(String(255), nullable=True)
   transcoding_status = Column(Enum(VideoTranscodingStatusEnum), default=VideoTranscodingStatusEnum.PENDING)
   created_at = Column(DateTime, default=datetime.utcnow)
   transcoded_video_url = Column(String(255), nullable=True)
-  thumbnail_url = Column(String(255), nullable=False)
+  thumbnail_url = Column(String(255), nullable=True)
   duration = Column(BIGINT, nullable=False)
   
   # Foreign keys  
@@ -28,6 +28,8 @@ class Video(Base):
   
   # Relationships - Helps with queries as we can get user data from video record and vice versa.
   user = relationship("User", back_populates="videos")
+  sections = relationship("Section", secondary=DBTables.SECTION_VIDEO_ASSOCIATION, back_populates="videos")
+  section_associations = relationship("SectionVideoAssociation", back_populates="videos")
   
 
   

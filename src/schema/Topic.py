@@ -17,4 +17,5 @@ class Topic(Base):
   created_at = Column(DateTime, default=datetime.utcnow())
   
   # Relationships
-  courses = relationship("Course", secondary="CourseTopicAssociation", back_populates="topics")
+  courses = relationship("Course", secondary=DBTables.COURSE_TOPIC_ASSOCIATION, back_populates="topics")
+  course_associations = relationship("CourseTopicAssociation", back_populates="topics")
