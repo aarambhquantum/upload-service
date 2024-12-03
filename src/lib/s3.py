@@ -28,3 +28,16 @@ class AWS_S3:
     except Exception as e:
       logger.exception(ErrorMessages.FILE_UPLOAD_ERROR)
       raise FileUploadException(ErrorMessages.FILE_UPLOAD_ERROR)
+    
+  async def initiate_multipart_upload(self, filename: str):
+    try:
+      async with self.session.client("s3") as s3:
+          response = await s3.create_multipart_upload(
+              Bucket=config.aws_bucket_name,
+              Key=filename
+          )
+          upload_id = response.get('UploadId')
+          return upload_id
+    except Exception as e:
+      logger.exception(f"{ErrorMessages.FILE_MULTIPART_UPLOAD_ERROR} for {filename}: {str(e)}")
+      raise FileUploadException(ErrorMessages.FILE_MULTIPART_UPLOAD_ERROR)
