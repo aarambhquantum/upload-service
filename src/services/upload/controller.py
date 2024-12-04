@@ -5,7 +5,12 @@ from src.configs.error_constants import ErrorMessages
 from db.session import get_db, save_new_row, update_old_row
 from src.schema.main import Video
 from src.configs.enums import VideoTranscodingStatusEnum
-from services.upload.serializer import InitiateUploadInbound, InitiateUploadOutbound
+from services.upload.serializer import (
+    InitiateUploadInbound,
+    InitiateUploadOutbound,
+    GetPresignedUrlInbound,
+    CompleteMultiPartUploadInbound,
+)
 
 db = get_db()
 
@@ -51,10 +56,35 @@ class UploadController:
         return {"success": True, "data": response}
 
     @classmethod
-    async def initiateUpload(self, request: Request, payload: InitiateUploadInbound):
+    async def initiate_upload(self, request: Request, payload: InitiateUploadInbound):
         s3 = AWS_S3()
         upload_id = await s3.initiate_multipart_upload(payload.filename)
 
         # add an entry into the video table with or without uploadId.
 
         return InitiateUploadOutbound(upload_id=upload_id)
+
+    @classmethod
+    async def generate_presigned_urls(
+        self, request: Request, payload: GetPresignedUrlInbound
+    ):
+        s3 = AWS_S3()
+        presigned_url = []
+        for part_number in range(payload.part_count):
+            url = await s3.generate_presigned_part_url(
+                payload.filename, payload.upload_id, part_number
+            )
+            presigned_url.append(url)
+
+        return presigned_url
+
+    @classmethod
+    async def complete_multipart_upload(
+        self, request: Request, payload: CompleteMultiPartUploadInbound
+    ):
+        s3 = AWS_S3()
+        response = await s3.complete_multipart_upload(
+            payload.filename, payload.upload_id, payload.etags
+        )
+
+        return response

@@ -7,3 +7,13 @@ class InitiateUploadInbound(BaseModel):
   
 class InitiateUploadOutbound(BaseModel):
   upload_id: str
+  
+class GetPresignedUrlInbound(BaseModel):
+  filename: str
+  upload_id: str
+  part_count: int
+  
+class CompleteMultiPartUploadInbound(BaseModel):
+  filename: str
+  upload_id: str
+  etags: dict[str, int]
