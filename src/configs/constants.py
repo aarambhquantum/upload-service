@@ -8,5 +8,4 @@ class APIResponse(BaseModel):
 
 class ErrorResponse(APIResponse):
     status: str = "error"
-    code: int
     data: Optional[Any] = None

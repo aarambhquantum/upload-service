@@ -10,7 +10,7 @@ async def initiate_upload(request: Request, payload: InitiateUploadInbound):
   response = await UploadController.initiate_upload(request, payload)
   return success_response(response)
 
-@router.get("/generate-presigned-urls")
+@router.post("/generate-presigned-urls")
 async def get_presigned_urls(request: Request, payload: GetPresignedUrlInbound):
   response = await UploadController.generate_presigned_urls(request, payload)
   return success_response(response)

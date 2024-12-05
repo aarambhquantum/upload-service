@@ -90,11 +90,11 @@ class AWS_S3:
                     Bucket=config.aws_bucket_name,
                     Key=filename,
                     UploadId=upload_id,
-                    MultipartUpload={"Parts": parts},
+                    MultipartUpload={"Parts": sorted([part.dict() for part in parts], key=lambda x: x["PartNumber"])},
                 )
                 return response
         except Exception as e:
             logger.exception(
-                f"{ErrorMessages.ERROR_WHILE_COMPLETING_FILE_UPLOAD} for {filename}: {str(e)}"
+                f"{ErrorMessages.ERROR_WHILE_COMPLETING_FILE_UPLOAD} for {filename}: {str(e)} {parts}"
             )
             raise FileUploadException(ErrorMessages.ERROR_WHILE_COMPLETING_FILE_UPLOAD)

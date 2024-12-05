@@ -70,7 +70,7 @@ class UploadController:
     ):
         s3 = AWS_S3()
         presigned_url = []
-        for part_number in range(payload.part_count):
+        for part_number in range(1, payload.part_count+1):
             url = await s3.generate_presigned_part_url(
                 payload.filename, payload.upload_id, part_number
             )

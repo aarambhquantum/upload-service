@@ -8,5 +8,5 @@ def register_handlers(app):
   @app.exception_handler(FileUploadException)
   async def file_upload_exception_handler(request: Request, exception: FileUploadException):
     content = error_response(exception.message)
-    return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=content)
+    return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=content.dict())
     

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List
 from src.configs.enums import VideoTranscodingStatusEnum
 
 class InitiateUploadInbound(BaseModel):
@@ -13,7 +13,12 @@ class GetPresignedUrlInbound(BaseModel):
   upload_id: str
   part_count: int
   
+class ETag(BaseModel):
+  ETag: str
+  PartNumber: int
+
 class CompleteMultiPartUploadInbound(BaseModel):
   filename: str
   upload_id: str
-  etags: dict[str, int]
+  etags: List[ETag]
+  
