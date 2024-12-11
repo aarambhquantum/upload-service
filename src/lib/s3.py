@@ -73,6 +73,36 @@ class AWS_S3:
             )
             raise FileUploadException(ErrorMessages.PRESIGNED_URL_GENERATION_FAILED)
 
+    async def generate_presigned_url(
+        self,
+        filename: str,
+        expiration: int = 60 * 60 * 24,  # Default expiration time is 24 hours
+    ):
+        """
+        Generate a presigned URL for uploading a file to S3.
+
+        :param filename: The S3 object key for the file.
+        :param expiration: The expiration time in seconds.
+        :return: The presigned URL for uploading the file.
+        """
+        try:
+            async with self.session.client("s3") as s3:
+                # Generate presigned URL for PUT request to upload the file
+                presigned_url = await s3.generate_presigned_url(
+                    "put_object",
+                    Params={
+                        "Bucket": config.aws_bucket_name,
+                        "Key": filename,
+                    },
+                    ExpiresIn=expiration,
+                )
+                return presigned_url
+        except Exception as e:
+            logger.exception(
+                f"{ErrorMessages.PRESIGNED_URL_GENERATION_FAILED} for {filename}: {str(e)}"
+            )
+            raise FileUploadException(ErrorMessages.PRESIGNED_URL_GENERATION_FAILED)
+
     async def complete_multipart_upload(
         self, filename: str, upload_id: str, parts: list
     ):
@@ -90,7 +120,12 @@ class AWS_S3:
                     Bucket=config.aws_bucket_name,
                     Key=filename,
                     UploadId=upload_id,
-                    MultipartUpload={"Parts": sorted([part.dict() for part in parts], key=lambda x: x["PartNumber"])},
+                    MultipartUpload={
+                        "Parts": sorted(
+                            [part.dict() for part in parts],
+                            key=lambda x: x["PartNumber"],
+                        )
+                    },
                 )
                 return response
         except Exception as e:

@@ -9,9 +9,8 @@ class InitiateUploadOutbound(BaseModel):
   upload_id: str
   
 class GetPresignedUrlInbound(BaseModel):
-  filename: str
-  upload_id: str
-  part_count: int
+  files: List[str]
+  video_name: str
   
 class ETag(BaseModel):
   ETag: str

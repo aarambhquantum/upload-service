@@ -70,9 +70,9 @@ class UploadController:
     ):
         s3 = AWS_S3()
         presigned_url = []
-        for part_number in range(1, payload.part_count+1):
-            url = await s3.generate_presigned_part_url(
-                payload.filename, payload.upload_id, part_number
+        for filename in payload.files:
+            url = await s3.generate_presigned_url(
+                f'videos/{payload.video_name}/{filename}'
             )
             presigned_url.append(url)
 
@@ -88,3 +88,4 @@ class UploadController:
         )
 
         return response
+
